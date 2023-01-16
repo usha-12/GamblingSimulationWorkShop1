@@ -5,6 +5,8 @@ public class GamblingSimulation {
     public int bet = 0;
     public int wins = 0;
     public int cumulativeFunds = 0;
+    public int daysWon = 0;
+    public int daysLost = 0;
     public static void main(String[] args) {
         System.out.println("---------------Welcome Gambling Simulation Problem-------------------");
         GamblingSimulation gambler = new GamblingSimulation();
@@ -60,6 +62,8 @@ public class GamblingSimulation {
 
     public void displayTwentyDaysResult() {
         System.out.println("\n\nFunds Stats after 20 days of Gambling...");
+        System.out.println("Number of days won funds :	"+daysWon);
+        System.out.println("Number of days lost funds :	"+daysLost);
         if (cumulativeFunds > (100*20))
             System.out.println("Total Funds Won : $"+(cumulativeFunds-(100*20)));
         else
@@ -67,7 +71,7 @@ public class GamblingSimulation {
         System.out.println("Total Funds : $"+cumulativeFunds);
     }
 }
-/*After 20 days of playing
-every day would like to
-know the total amount
-won or lost.*/
+/*Each month would like
+to know the days won
+and lost and by how
+much.*/
