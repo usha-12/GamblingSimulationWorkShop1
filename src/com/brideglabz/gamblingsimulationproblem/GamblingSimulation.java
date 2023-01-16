@@ -1,5 +1,7 @@
 package com.brideglabz.gamblingsimulationproblem;
 
+import java.util.Scanner;
+
 public class GamblingSimulation {
     public int funds = 0;
     public int bet = 0;
@@ -7,22 +9,25 @@ public class GamblingSimulation {
     public int cumulativeFunds = 0;
     public int daysWon = 0;
     public int daysLost = 0;
+    public boolean wonOrNot = false;
     public boolean[] daysArray = new boolean [20];
     public static void main(String[] args) {
         System.out.println("---------------Welcome Gambling Simulation Problem-------------------");
         GamblingSimulation gambler = new GamblingSimulation();
-        gambler.gameInitialise();
-        gambler.makeBet();
-        gambler.gamble();
-        gambler.dailyGamble();
-        gambler.displayLuckyDays();
+        gambler.playGame();
     }
     public void gameInitialise() {
         System.out.println("\nInitialising game...");
         funds = 100;
         bet = 1;
+        wins = 0;
+        cumulativeFunds = 0;
+        daysWon = 0;
+        daysLost = 0;
+        wonOrNot = false;
         System.out.println("Funds : $"+funds);
     }
+
     public void makeBet() {
         double result = Math.random();
         boolean betResult = false;
@@ -31,9 +36,8 @@ public class GamblingSimulation {
             wins++;
             betResult = true;
         }
-        else {
+        else
             funds -= bet;
-        }
         displayResults(betResult);
     }
 
@@ -49,28 +53,39 @@ public class GamblingSimulation {
     public void gamble() {
         int minimumFund = funds - (funds/2);
         int maximumFund = funds + (funds/2);
-        while(funds < maximumFund && funds > minimumFund) {
+        while(funds < maximumFund && funds > minimumFund)
             makeBet();
+        if(funds == 150) {
+            cumulativeFunds += 150;
+            daysWon++;
+            daysArray[daysWon+daysLost-1] = true;
+        }
+        else if (funds == 50) {
+            cumulativeFunds += 50;
+            daysLost++;
+            daysArray[daysWon+daysLost-1] = false;
         }
         System.out.println("\nPlayer resigns for the day.");
     }
+
     public void dailyGamble() {
         for(int day = 1; day <= 20; day++) {
             funds = 100;
             gamble();
         }
-        this.displayTwentyDaysResult();
     }
 
     public void displayTwentyDaysResult() {
         System.out.println("\n\nFunds Stats after 20 days of Gambling...");
         System.out.println("Number of days won funds :	"+daysWon);
         System.out.println("Number of days lost funds :	"+daysLost);
-        if (cumulativeFunds > (100*20))
-            System.out.println("Total Funds Won : $"+(cumulativeFunds-(100*20)));
+        if (cumulativeFunds > (100*20)) {
+            System.out.println("Total Funds Won :	$"+(cumulativeFunds-(100*20)));
+            wonOrNot = true;
+        }
         else
-            System.out.println("Total Funds Lost : $"+((100*20)-cumulativeFunds));
-        System.out.println("Total Funds : $"+cumulativeFunds);
+            System.out.println("Total Funds Lost :	$"+((100*20)-cumulativeFunds));
+        System.out.println("Total Funds Remaining :	$"+cumulativeFunds);
     }
 
     public void displayLuckyDays() {
@@ -83,9 +98,36 @@ public class GamblingSimulation {
             if (!daysArray[i])
                 System.out.print("   Day "+(i+1));
     }
+
+    public void playGame() {
+        gameInitialise();
+        dailyGamble();
+        displayTwentyDaysResult();
+        displayLuckyDays();
+        continueGameOrStop();
+    }
+
+    public void continueGameOrStop() {
+        Scanner sc = new Scanner(System.in);
+        if (wonOrNot) {
+            System.out.println("\n\nYOU HAVE WON!");
+            System.out.println("Congratulations!!!");
+            System.out.println("\nEnter 'Yes' to play for another month.");
+            System.out.println("\nEnter 'Stop' to quit the game.");
+            char gamingOption = sc.next().charAt(0);
+            if (gamingOption == 'y' || gamingOption == 'Y')
+                playGame();
+            else if(gamingOption == 's' || gamingOption == 'S')
+                System.out.println("\nThank you for playing!");
+        }
+        else {
+            System.out.println("\n\nYOU HAVE LOST!");
+            System.out.println("You cannot play again.\nBetter luck next time.");
+        }
+        sc.close();
+    }
 }
-/*Would also like to
-know my luckiest day
-when I won maximum
-and my unluckiest day
-when I lost maximum*/
+/*If won would like to
+continue playing next
+month or stop
+Gambling*/
