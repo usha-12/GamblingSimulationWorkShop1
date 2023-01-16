@@ -4,12 +4,14 @@ public class GamblingSimulation {
     public int funds = 0;
     public int bet = 0;
     public int wins = 0;
+    public int cumulativeFunds = 0;
     public static void main(String[] args) {
         System.out.println("---------------Welcome Gambling Simulation Problem-------------------");
         GamblingSimulation gambler = new GamblingSimulation();
         gambler.gameInitialise();
         gambler.makeBet();
         gambler.gamble();
+        gambler.dailyGamble();
     }
     public void gameInitialise() {
         System.out.println("\nInitialising game...");
@@ -48,9 +50,24 @@ public class GamblingSimulation {
         }
         System.out.println("\nPlayer resigns for the day.");
     }
+    public void dailyGamble() {
+        for(int day = 1; day <= 20; day++) {
+            funds = 100;
+            gamble();
+        }
+        this.displayTwentyDaysResult();
+    }
+
+    public void displayTwentyDaysResult() {
+        System.out.println("\n\nFunds Stats after 20 days of Gambling...");
+        if (cumulativeFunds > (100*20))
+            System.out.println("Total Funds Won : $"+(cumulativeFunds-(100*20)));
+        else
+            System.out.println("Total Funds Lost : $"+((100*20)-cumulativeFunds));
+        System.out.println("Total Funds : $"+cumulativeFunds);
+    }
 }
-/*As a Calculative
-Gambler if won or lost
-50% of the stake,
-would resign for the
-day*/
+/*After 20 days of playing
+every day would like to
+know the total amount
+won or lost.*/
